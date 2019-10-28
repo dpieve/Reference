@@ -21,7 +21,10 @@ int main () {
 	for (auto i: v) 
 		cout << i << ' ';
 
-
+	// one element
+	sort(v.begin(), v.end());
+	v.resize(unique(v.begin(), v.end()) - v.begin());
+	
 	
 	return 0;
 }
