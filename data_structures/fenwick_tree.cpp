@@ -2,9 +2,9 @@ const int MAXN = 200010;
 
 int t[MAXN], N;
 
-void add (int k, int x) {
-	while (k < N) {
-		t[k] += x;
+void add (int k, int v) {
+	while (k < MAXN) {
+		t[k] += v;
 		k += (k & (-k));
 	}
 }
@@ -15,7 +15,7 @@ int sum (int k) {
 		s += t[k];
 		k -= (k & (-k));
 	}
-	return k;
+	return s;
 }
 
 int ask (int L, int R) { 
