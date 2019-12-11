@@ -6,8 +6,7 @@ void build(int i, int l, int r) {
 	if (l == r) {
 		t[i] = a[l];
 	} 
-	else {
-		
+	else {		
 		int m = (l+r)/2;
 		build(2*i, l, m);
 		build(2*i+1, m+1, r);
@@ -19,8 +18,8 @@ void build(int i, int l, int r) {
 void push(int i, int l, int r) {
 	if (lz[i]) {
 		t[i] += lz[i] * (r-l+1);
-		if (l != r) {
-			lz[2*i] += lz[i];
+		if (l != r) {			//caso não seja folha
+			lz[2*i] += lz[i];	//então propagar para os filhos
 			lz[2*i+1] += lz[i];
 		}
 		lz[i] = 0;
@@ -30,11 +29,11 @@ void push(int i, int l, int r) {
 /* range_query ql, qr */ 
 int query(int i, int l, int r, int ql, int qr) {
 	push(i, l, r);
-	if (ql <= l && r <= qr) return t[i];
-	if (qr < l || r < ql) return 0;
-	
+	if (ql <= l && r <= qr) 
+		return t[i];
+	if (qr < l || r < ql) 		// se carry acabar antes do nó ou 
+		return 0;		// o nó acabar antes da carry -> está fora!		
 	int m = (l+r)/2;
-	
 	return query(2*i, l, m, ql, qr)
 		 	+ query(2*i+1, m+1, r, ql, qr);
 }
@@ -42,8 +41,8 @@ int query(int i, int l, int r, int ql, int qr) {
 /* range_upd [ql, qr] += x */
 void update(int i, int l, int r, int ql, int qr, int x) {
 	push(i, l, r);
-	
-	if (qr < l || r < ql) return;
+	if (qr < l || r < ql) 
+		return;
 	if (ql <= l && r <= qr) {
 		lz[i] += x;
 		push(i, l, r);
