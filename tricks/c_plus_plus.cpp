@@ -25,6 +25,9 @@ int main () {
 	sort(v.begin(), v.end());
 	v.resize(unique(v.begin(), v.end()) - v.begin());
 	
+	//substring
+	string str = "................";
+	std::string str2 = str.substr (3,5); // 3 = start, 5 = len
 	
 	return 0;
 }
