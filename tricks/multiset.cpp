@@ -1,4 +1,4 @@
 //MULTISET - erase a single element
-
+int value;
 multiset<int> ms;
-s.erase(ms.lower_bound(value));
+ms.erase(ms.lower_bound(value));
