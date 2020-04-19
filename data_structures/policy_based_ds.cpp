@@ -18,7 +18,7 @@ ordered_set;
 
 int main() {
 	
-	ordered_set X;
+  ordered_set X;
   X.insert(1);        // X.erase(value); it works too
   X.insert(2);
   X.insert(4);
