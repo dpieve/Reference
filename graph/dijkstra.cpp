@@ -1,31 +1,36 @@
-#define MAX 100001
-#define LL unsigned long long
+using LL = long long;
 
-typedef pair< LL, int > ii;
+const LL INF = 1e17;
+const int MAXN = 200010;
 
-vector< ii > G[MAX];
 vector< LL > dist;
+vector< int> parent;
+vector< pair<LL, int> > G[MAXN];
 
-int s, t, n; //read
-
-LL dijkstra() {
+LL dijkstra(int s, int t, int n) {
 
 	dist.assign(n, INF); dist[s] = 0;
-	priority_queue< ii, vector< ii >, greater< ii > > q;
-	q.push(ii(0, s));
+	parent.assign(n, -1); parent[s] = s;
+
+	priority_queue< pair<LL,int> , vector< pair<LL, int> >, greater< pair<LL, int>  > > q;
+	q.push(make_pair(0LL, s));
 	
 	while (!q.empty()) {
-		int u = q.top().second; q.pop();
+		int u = q.top().second; 
+		q.pop();
+		
 		if (u == t) break;
-		for (auto v : G[u]) {
+		
+		for (pair<LL,int> v : G[u]) {
 			if (dist[v.second] > dist[u] + v.first) {
 				dist[v.second] = dist[u] + v.first;
-				q.push(ii(dist[v.second], v.second));
+
+				parent[v.second] = u;
+				q.push(make_pair(dist[v.second], v.second));
 			}
 		}
 	}
+	
 	return dist[t];
+	
 }
-
-/*G[i].push_back(ii(l, a));
-  G[a].push_back(ii(l, i)); */
