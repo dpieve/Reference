@@ -1,36 +1,86 @@
+#include<bits/stdc++.h>
+
+using namespace std;
+
 using LL = long long;
 
-const LL INF = 1e17;
 const int MAXN = 200010;
+const LL INF = 0x3f3f3f3f3f3f3f3fLL;
 
-vector< LL > dist;
-vector< int> parent;
-vector< pair<LL, int> > G[MAXN];
+int N, M;
+vector< pair<int,int> > G[MAXN];
 
-LL dijkstra(int s, int t, int n) {
+void dijkstra(int source, int target) {
+	priority_queue < pair<LL, int> > Q;
+	Q.push(make_pair(0LL, source));
 
-	dist.assign(n, INF); dist[s] = 0;
-	parent.assign(n, -1); parent[s] = s;
+	vector< LL > D(N, INF);
+	D[source] = 0;
 
-	priority_queue< pair<LL,int> , vector< pair<LL, int> >, greater< pair<LL, int>  > > q;
-	q.push(make_pair(0LL, s));
-	
-	while (!q.empty()) {
-		int u = q.top().second; 
-		q.pop();
-		
-		if (u == t) break;
-		
-		for (pair<LL,int> v : G[u]) {
-			if (dist[v.second] > dist[u] + v.first) {
-				dist[v.second] = dist[u] + v.first;
+	vector< int > P(N, -1);
 
-				parent[v.second] = u;
-				q.push(make_pair(dist[v.second], v.second));
+	while(!Q.empty()) {
+		int u = Q.top().second;
+		LL d = -Q.top().first;
+
+		Q.pop();
+
+		if (u == target)
+			break;
+
+		if (d > D[u])
+			continue;
+
+		for(int i = 0; i < (int)G[u].size(); ++i) {
+			pair<int,int> v = G[u][i];
+
+			if (D[v.second] > D[u] + v.first) {
+				D[v.second] = D[u] + v.first;
+			
+				P[v.second] = u;
+				Q.push(make_pair(-D[v.second], v.second));
 			}
 		}
 	}
+
+	if (D[target] == INF) {
+		cout << -1 << '\n';
+		return;
+	}
+
+	vector<int> ans;
+	int x = target;
+	while(x != -1) {
+		ans.push_back(x);
+		x = P[x];
+	}
+
+	reverse(ans.begin(), ans.end());
+
+	for(int i = 0; i < ans.size(); ++i) {
+		cout << ans[i]  + 1 << ' ';
+	}
+	cout << '\n';
+
+}
+
+
+int main() {
 	
-	return dist[t];
-	
+	ios_base :: sync_with_stdio(0); cin.tie(NULL);
+
+	cin >> N >> M;
+
+	for(int i = 0; i < M; ++i) {
+		int u, v, w;
+		cin >> u >> v >> w;
+		--u; --v;
+		G[u].push_back({w, v});
+		G[v].push_back({w, u});
+	}
+
+	dijkstra(0, N - 1);
+
+
+	return 0;	
 }
