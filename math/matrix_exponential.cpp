@@ -1,34 +1,42 @@
-#define ll long long 
-
-const int MOD = 1e9;
+using LL = long long;
+const int MAXN = 101;
+const int MOD = 1000000007;
 
 struct Matrix {
-	
-	ll mat[10][10];
+    
+    LL mat[MAXN][MAXN];
 
-	Matrix () { memset (mat, 0, sizeof mat); }
+    Matrix () { 
+        for(int i = 0; i < MAXN; ++i)
+            for(int j = 0; j < MAXN; ++j)
+                mat[i][j] = 0;
+    }
 
-	Matrix operator * (Matrix b) {
-		Matrix a;
-		for (int i = 0; i < 2; ++i) {
-			for (int j = 0; j < 2; ++j) {
-				for (int k = 0; k < 2; ++k) {
-					a.mat[i][j] += ((mat[i][k] % MOD) * (b.mat[k][j] % MOD)) % MOD;
-					a.mat[i][j] %= MOD;
-				}
-			}
-		}
-		return a;
-	}
+    Matrix operator * (Matrix b) {
+        Matrix a;
+        for (int i = 0; i < MAXN; ++i) {
+            for (int j = 0; j < MAXN; ++j) {
+                for (int k = 0; k < MAXN; ++k) {
+                    a.mat[i][j] += ((mat[i][k] % MOD) * (b.mat[k][j] % MOD)) % MOD;
+                    a.mat[i][j] %= MOD;
+                }
+            }
+        }
+        return a;
+    }
 
 };
 
-ll N; // resp = fexp (F, N) * D;
+// Matrix total = fexp(mat, k);
 
-Matrix fexp (Matrix b, ll e) {
-	if (e == 1) return b;
-	if (e & 1) return b * fexp (b, e - 1);
-	Matrix r = fexp (b, e / 2);
-	return r * r;
-
+Matrix fexp (Matrix b, LL e) {
+    Matrix prod;
+    for(int i = 0; i < MAXN; ++i)
+        prod.mat[i][i] = 1;
+    while(e > 0) {
+        if (e % 2) prod = prod * b;
+        b = b * b;
+        e /= 2;
+    }
+    return prod;
 }
